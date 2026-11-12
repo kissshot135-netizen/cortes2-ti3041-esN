@@ -1,0 +1,63 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Administración | Ferretería{% endblock %}
+
+{% block content %}
+<h1>Administrar catálogo</h1>
+<section class="panel">
+    <h2>Agregar producto</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Agregar producto</button>
+    </form>
+</section>
+
+<h2>Productos registrados</h2>
+{% if productos %}
+    <div class="panel">
+        <table>
+            <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Acción</th></tr></thead>
+            <tbody>
+                {% for producto in productos %}
+                    <tr>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.categoria }}</td>
+                        <td>${{ producto.precio }}</td>
+                        <td>{{ producto.stock }}</td>
+                        <td>
+                            <form method="post" action="{% url 'eliminar_producto' producto.id %}">
+                                {% csrf_token %}
+                                <button class="danger" type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p>No hay productos para administrar.</p>
+{% endif %}
+
+<h2>Compras recientes</h2>
+{% if compras %}
+    <div class="panel">
+        <table>
+            <thead><tr><th>Consumidor</th><th>Producto</th><th>Cantidad</th><th>Fecha</th></tr></thead>
+            <tbody>
+                {% for compra in compras %}
+                    <tr>
+                        <td>{{ compra.consumidor.username }}</td>
+                        <td>{{ compra.nombre_producto }}</td>
+                        <td>{{ compra.cantidad }}</td>
+                        <td>{{ compra.fecha|date:'d/m/Y H:i' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p>Aún no hay compras registradas.</p>
+{% endif %}
+{% endblock %}

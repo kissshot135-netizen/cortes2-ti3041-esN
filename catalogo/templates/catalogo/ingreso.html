@@ -1,0 +1,17 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Ingresar | Ferretería{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Ingresar</h1>
+    <p>Usa tu cuenta de consumidor o las credenciales de administrador.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button type="submit">Ingresar</button>
+    </form>
+    <p>¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate como consumidor</a>.</p>
+</section>
+{% endblock %}

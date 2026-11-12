@@ -1,0 +1,282 @@
+[
+  {
+    "nombre": "Martillo de acero 16 oz",
+    "categoria": "Herramientas",
+    "precio": 8990,
+    "stock": 15,
+    "imagen": "https://images.unsplash.com/photo-1679210208120-1b6a008be9b4?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Destornillador Phillips",
+    "categoria": "Herramientas",
+    "precio": 3990,
+    "stock": 24,
+    "imagen": "https://images.unsplash.com/photo-1581621293775-7aac902d7032?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Destornillador plano",
+    "categoria": "Herramientas",
+    "precio": 3990,
+    "stock": 20,
+    "imagen": "https://images.unsplash.com/photo-1663638964046-4b576e739a3a?q=80&w=388&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Alicate universal 8 pulgadas",
+    "categoria": "Herramientas",
+    "precio": 6990,
+    "stock": 18,
+    "imagen": "https://images.unsplash.com/photo-1586374579231-32db331d5b19?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Llave inglesa 10 pulgadas",
+    "categoria": "Herramientas",
+    "precio": 7990,
+    "stock": 12,
+    "imagen": "https://images.unsplash.com/photo-1643730169397-a4bf0b10db5d?q=80&w=306&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Cinta métrica 5 metros",
+    "categoria": "Herramientas",
+    "precio": 4990,
+    "stock": 30,
+    "imagen": "https://images.unsplash.com/photo-1703756291638-b1774ae3c186?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Nivel de burbuja 40 cm",
+    "categoria": "Herramientas",
+    "precio": 6490,
+    "stock": 10,
+    "imagen": "https://plus.unsplash.com/premium_photo-1770631492045-8672b9fe9890?q=80&w=824&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Sierra manual",
+    "categoria": "Herramientas",
+    "precio": 8990,
+    "stock": 8,
+    "imagen": "https://images.unsplash.com/photo-1502068713670-5acaa8128a4f?q=80&w=873&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Broca para concreto 8 mm",
+    "categoria": "Herramientas",
+    "precio": 2490,
+    "stock": 40,
+    "imagen": "https://images.unsplash.com/photo-1503792574895-6074f691cc6a?q=80&w=851&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Broca para metal 6 mm",
+    "categoria": "Herramientas",
+    "precio": 2290,
+    "stock": 35,
+    "imagen": "https://images.unsplash.com/photo-1748273784058-57eade4322d6?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Tornillo madera 4x40 mm",
+    "categoria": "Tornillería",
+    "precio": 1990,
+    "stock": 100,
+    "imagen": "https://images.unsplash.com/photo-1625773084027-5ede6d300b25?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Tornillo madera 5x50 mm",
+    "categoria": "Tornillería",
+    "precio": 2490,
+    "stock": 90,
+    "imagen": "https://images.unsplash.com/photo-1655927858183-fe31d5dd1080?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Tornillo autoperforante",
+    "categoria": "Tornillería",
+    "precio": 2990,
+    "stock": 80,
+    "imagen": "https://images.unsplash.com/photo-1590321820422-200a2eefa4a9?q=80&w=876&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "nombre": "Tuerca hexagonal 8 mm",
+    "categoria": "Tornillería",
+    "precio": 1490,
+    "stock": 120,
+    "imagen": "https://tse2.mm.bing.net/th/id/OIP.xBKkccaukuSMFyjft97C6QHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Arandela plana 8 mm",
+    "categoria": "Tornillería",
+    "precio": 990,
+    "stock": 150,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.5xVaGf4MTmYIiJzySbbmxQAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Perno hexagonal 10 mm",
+    "categoria": "Tornillería",
+    "precio": 1990,
+    "stock": 75,
+    "imagen": "https://tse1.mm.bing.net/th/id/OIP.d8rbcwIr568MHl0XJ0LThAHaF7?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Cable eléctrico 2.5 mm",
+    "categoria": "Electricidad",
+    "precio": 15990,
+    "stock": 20,
+    "imagen": "https://tse1.mm.bing.net/th/id/OIP.SWCl862XdiviKflx0F3xTQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Enchufe doble blanco",
+    "categoria": "Electricidad",
+    "precio": 3490,
+    "stock": 30,
+    "imagen": "https://th.bing.com/th/id/R.583f78e544f34bf9df27fe6f9c47a04f?rik=noEmj%2fbQP%2bIc6Q&riu=http%3a%2f%2fdistritoled.cl%2fcdn%2fshop%2fproducts%2fDL2917_0.jpg%3fv%3d1669151171&ehk=hW5SEUhFrK1S%2fmjhmaMnn99e4RTMXvfeSzpSk8oodQc%3d&risl=&pid=ImgRaw&r=0"
+  },
+  {
+    "nombre": "Interruptor simple",
+    "categoria": "Electricidad",
+    "precio": 2990,
+    "stock": 25,
+    "imagen": "https://http2.mlstatic.com/D_NQ_NP_656297-MLA81427044729_122024-O.webp"
+  },
+  {
+    "nombre": "Ampolleta LED 9W",
+    "categoria": "Electricidad",
+    "precio": 2490,
+    "stock": 50,
+    "imagen": "https://cdnx.jumpseller.com/elights-cl/image/4990423/resize/1200/1200?1617628757"
+  },
+  {
+    "nombre": "Regleta eléctrica 6 posiciones",
+    "categoria": "Electricidad",
+    "precio": 8990,
+    "stock": 15,
+    "imagen": "https://fainsa.com.ec/wp-content/uploads/2022/07/regleta-electrica-de-6-servicios-multitoma-Fainsa.jpeg"
+  },
+  {
+    "nombre": "Cinta aisladora negra",
+    "categoria": "Electricidad",
+    "precio": 1990,
+    "stock": 45,
+    "imagen": "https://tse4.mm.bing.net/th/id/OIP.fMqDMcRtlgPRbT88OS1LzgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Pintura blanca interior 1 galón",
+    "categoria": "Pintura",
+    "precio": 18990,
+    "stock": 12,
+    "imagen": "https://media.falabella.com/sodimacCO/3005114/w=1036,h=832,f=webp,fit=contain,q=85"
+  },
+  {
+    "nombre": "Pintura látex blanca 4 litros",
+    "categoria": "Pintura",
+    "precio": 22990,
+    "stock": 10,
+    "imagen": "https://arcencohogar.vtexassets.com/arquivos/ids/403647-800-800?v=638919855166370000&width=800&height=800&aspect=true"
+  },
+  {
+    "nombre": "Brocha 2 pulgadas",
+    "categoria": "Pintura",
+    "precio": 2990,
+    "stock": 25,
+    "imagen": "https://tse2.mm.bing.net/th/id/OIP.6UrJqN4g5lFzaRenqZNgHAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Rodillo para pintura",
+    "categoria": "Pintura",
+    "precio": 4990,
+    "stock": 20,
+    "imagen": "https://http2.mlstatic.com/D_NQ_NP_677893-MLV48240499947_112021-O.webp"
+  },
+  {
+    "nombre": "Bandeja para pintura",
+    "categoria": "Pintura",
+    "precio": 2990,
+    "stock": 18,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.tfxYz0rGiD9VsxCiWBpK8QHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Silicona transparente",
+    "categoria": "Adhesivos",
+    "precio": 3990,
+    "stock": 30,
+    "imagen": "https://difratti.com/wp-content/uploads/2024/09/Silicon-1.png"
+  },
+  {
+    "nombre": "Pegamento universal",
+    "categoria": "Adhesivos",
+    "precio": 2990,
+    "stock": 35,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.3or0_d230blf6zDvGRYniAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Cinta doble contacto",
+    "categoria": "Adhesivos",
+    "precio": 3490,
+    "stock": 20,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.uljob-d_g0t3qX2cupWxhQHaGG?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Guantes de trabajo",
+    "categoria": "Seguridad",
+    "precio": 2990,
+    "stock": 40,
+    "imagen": "https://marcapl.com/marca/img/articulos/688_CUT.jpg"
+  },
+  {
+    "nombre": "Lentes de seguridad",
+    "categoria": "Seguridad",
+    "precio": 3990,
+    "stock": 25,
+    "imagen": "https://tse4.mm.bing.net/th/id/OIP.94_PjH_wURZ14W8vKTfeEwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Mascarilla protectora",
+    "categoria": "Seguridad",
+    "precio": 2490,
+    "stock": 30,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.3HI7Mk5kt7LosC3jU34UnAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Candado de seguridad 40 mm",
+    "categoria": "Seguridad",
+    "precio": 5990,
+    "stock": 15,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.5xcsgxbpne8cyyUHoW9e8AHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Manguera de jardín 10 metros",
+    "categoria": "Jardinería",
+    "precio": 12990,
+    "stock": 10,
+    "imagen": "https://tse2.mm.bing.net/th/id/OIP.T1F7JCSAZF4HcFcpoYFbiQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Pala de jardín",
+    "categoria": "Jardinería",
+    "precio": 6990,
+    "stock": 12,
+    "imagen": "https://i5.walmartimages.com/asr/cf101262-14e8-4545-8c7e-13b18b09f49b.765c85faceb149fa5b9f16c3fdd5cf60.jpeg"
+  },
+  {
+    "nombre": "Tijera de podar",
+    "categoria": "Jardinería",
+    "precio": 5990,
+    "stock": 14,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.xZJmomumKVfW6WNhPX1kCAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Regadera plástica 5 litros",
+    "categoria": "Jardinería",
+    "precio": 4990,
+    "stock": 16,
+    "imagen": "https://tse3.mm.bing.net/th/id/OIP.DwyvhxWCZvvlhVZVRatDbwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Llave de paso 1/2 pulgada",
+    "categoria": "Fontanería",
+    "precio": 4490,
+    "stock": 22,
+    "imagen": "https://tse2.mm.bing.net/th/id/OIP.ddfc9gN7WNstMgLtpsLXEAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "nombre": "Cinta de teflón",
+    "categoria": "Fontanería",
+    "precio": 1290,
+    "stock": 50,
+    "imagen": "https://tse2.mm.bing.net/th/id/OIP.OERCvAaCYo4xkYlK6HUlWAHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  }
+]

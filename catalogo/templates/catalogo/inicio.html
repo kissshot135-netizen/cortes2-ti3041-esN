@@ -1,0 +1,17 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Inicio | Ferretería{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Bienvenido a la ferretería</h1>
+    <p>Encuentra los productos que necesitas y compra de forma sencilla.</p>
+    <a class="button" href="{% url 'lista_productos' %}">Ir al catálogo</a>
+    {% if not user.is_authenticated %}
+        <a class="button" href="{% url 'ingreso' %}">Ingresar</a>
+        <a class="button" href="{% url 'registro' %}">Crear cuenta de consumidor</a>
+    {% elif user.is_staff %}
+        <a class="button" href="{% url 'gestionar_productos' %}">Administrar productos</a>
+    {% endif %}
+</section>
+{% endblock %}
