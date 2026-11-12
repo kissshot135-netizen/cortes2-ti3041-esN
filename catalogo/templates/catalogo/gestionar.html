@@ -4,6 +4,10 @@
 
 {% block content %}
 <h1>Administrar catálogo</h1>
+<p class="d-flex flex-wrap gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'gestionar_colecciones' %}">Gestionar colecciones</a>
+    <a class="btn btn-outline-primary" href="{% url 'reportes' %}">Ver reportes</a>
+</p>
 <section class="panel">
     <h2>Agregar producto</h2>
     <form method="post">
@@ -26,6 +30,7 @@
                         <td>${{ producto.precio }}</td>
                         <td>{{ producto.stock }}</td>
                         <td>
+                            <a class="btn btn-sm btn-outline-primary" href="{% url 'editar_producto' producto.id %}">Editar</a>
                             <form method="post" action="{% url 'eliminar_producto' producto.id %}">
                                 {% csrf_token %}
                                 <button class="danger" type="submit">Eliminar</button>

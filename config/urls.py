@@ -24,6 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.inicio, name='inicio'),
     path('catalogo/', views.lista_productos, name='lista_productos'),
+    path('colecciones/', views.lista_colecciones, name='lista_colecciones'),
+    path('contacto/', views.formulario_contacto, name='contacto'),
     path('cuenta/ingresar/', views.IngresoView.as_view(), name='ingreso'),
     path('cuenta/registro/', views.registro, name='registro'),
     path(
@@ -33,6 +35,27 @@ urlpatterns = [
     ),
     path('catalogo/<int:producto_id>/comprar/', views.comprar_producto, name='comprar_producto'),
     path('gestionar/', views.gestionar_productos, name='gestionar_productos'),
+    path('gestionar/reportes/', views.reportes, name='reportes'),
+    path(
+        'gestionar/productos/<int:producto_id>/editar/',
+        views.editar_producto,
+        name='editar_producto',
+    ),
+    path(
+        'gestionar/colecciones/',
+        views.gestionar_colecciones,
+        name='gestionar_colecciones',
+    ),
+    path(
+        'gestionar/colecciones/<int:coleccion_id>/editar/',
+        views.editar_coleccion,
+        name='editar_coleccion',
+    ),
+    path(
+        'gestionar/colecciones/<int:coleccion_id>/eliminar/',
+        views.eliminar_coleccion,
+        name='eliminar_coleccion',
+    ),
     path(
         'gestionar/<int:producto_id>/eliminar/',
         views.eliminar_producto,

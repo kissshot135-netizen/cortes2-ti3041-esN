@@ -1,0 +1,32 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Colecciones | Ferretería{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Colecciones</h1>
+{% if colecciones %}
+    <section class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+        {% for coleccion in colecciones %}
+            <div class="col">
+                <article class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">{{ coleccion.nombre }}</h2>
+                        {% if coleccion.descripcion %}
+                            <p class="card-text">{{ coleccion.descripcion }}</p>
+                        {% endif %}
+                        <ul class="mb-0">
+                            {% for producto in coleccion.productos.all %}
+                                <li>{{ producto.nombre }}</li>
+                            {% empty %}
+                                <li>Esta colección aún no tiene productos.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        {% endfor %}
+    </section>
+{% else %}
+    <p class="alert alert-info">Todavía no hay colecciones publicadas.</p>
+{% endif %}
+{% endblock %}

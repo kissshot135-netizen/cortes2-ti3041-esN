@@ -1,0 +1,47 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Reportes | Ferretería{% endblock %}
+
+{% block content %}
+<h1>Reportes del negocio</h1>
+<section class="mb-5">
+    <h2 class="h4">Inventario por categoría</h2>
+    <div class="table-responsive panel">
+        <table class="table mb-0">
+            <thead><tr><th>Categoría</th><th>Productos</th><th>Unidades en stock</th><th>Valor del inventario</th></tr></thead>
+            <tbody>
+                {% for fila in productos_por_categoria %}
+                    <tr>
+                        <td>{{ fila.categoria }}</td>
+                        <td>{{ fila.cantidad_productos }}</td>
+                        <td>{{ fila.stock_total|default:0 }}</td>
+                        <td>${{ fila.valor_inventario|default:0 }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">No hay productos para reportar.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h2 class="h4">Productos más vendidos</h2>
+    <div class="table-responsive panel">
+        <table class="table mb-0">
+            <thead><tr><th>Producto</th><th>Unidades vendidas</th><th>Ingresos</th></tr></thead>
+            <tbody>
+                {% for fila in ventas_por_producto %}
+                    <tr>
+                        <td>{{ fila.nombre_producto }}</td>
+                        <td>{{ fila.unidades_vendidas }}</td>
+                        <td>${{ fila.ingresos }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="3">Todavía no hay ventas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

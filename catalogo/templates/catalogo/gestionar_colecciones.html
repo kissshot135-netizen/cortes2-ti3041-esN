@@ -1,0 +1,41 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Gestionar colecciones | Ferretería{% endblock %}
+
+{% block content %}
+<h1>Gestionar colecciones</h1>
+<section class="panel mb-4">
+    <h2 class="h4">Crear colección</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Crear colección</button>
+    </form>
+</section>
+
+<h2 class="h4">Colecciones registradas</h2>
+{% if colecciones %}
+    <div class="table-responsive panel">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>Nombre</th><th>Productos</th><th>Acciones</th></tr></thead>
+            <tbody>
+                {% for coleccion in colecciones %}
+                    <tr>
+                        <td>{{ coleccion.nombre }}</td>
+                        <td>{{ coleccion.productos.count }}</td>
+                        <td class="d-flex gap-2">
+                            <a class="btn btn-sm btn-outline-primary" href="{% url 'editar_coleccion' coleccion.id %}">Editar</a>
+                            <form method="post" action="{% url 'eliminar_coleccion' coleccion.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p>No hay colecciones todavía.</p>
+{% endif %}
+{% endblock %}

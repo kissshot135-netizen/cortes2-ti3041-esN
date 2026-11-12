@@ -188,3 +188,97 @@ class CatalogoTests(TestCase):
         self.assertRedirects(respuesta, url)
         self.assertFalse(Producto.objects.filter(pk=taladro.pk).exists())
         self.assertEqual(Producto.objects.count(), self.productos_iniciales)
+
+    def test_administrador_puede_actualizar_producto_desde_la_web(self):
+        self.client.force_login(self.administrador)
+
+        respuesta = self.client.post(
+            reverse('editar_producto', args=[self.producto.pk]),
+            {
+                'nombre': 'Martillo actualizado',
+                'categoria': 'Herramientas',
+                'precio': 13000,
+                'stock': 7,
+                'imagen': '',
+            },
+        )
+
+        self.assertRedirects(respuesta, reverse('gestionar_productos'))
+        self.producto.refresh_from_db()
+        self.assertEqual(self.producto.nombre, 'Martillo actualizado')
+        self.assertEqual(self.producto.stock, 7)
+
+    def test_administrador_puede_gestionar_colecciones(self):
+        self.client.force_login(self.administrador)
+        url = reverse('gestionar_colecciones')
+
+        respuesta = self.client.post(
+            url,
+            {
+                'nombre': 'Herramientas esenciales',
+                'descripcion': 'Para el hogar',
+                'productos': [str(self.producto.pk)],
+            },
+        )
+
+        self.assertRedirects(respuesta, url)
+        coleccion = Coleccion.objects.get(nombre='Herramientas esenciales')
+        self.assertIn(self.producto, coleccion.productos.all())
+        self.assertEqual(
+            self.client.get(reverse('lista_colecciones')).status_code,
+            200,
+        )
+
+        respuesta = self.client.post(
+            reverse('editar_coleccion', args=[coleccion.pk]),
+            {
+                'nombre': 'Herramientas para casa',
+                'descripcion': 'Selección actualizada',
+                'productos': [str(self.producto.pk)],
+            },
+        )
+        self.assertRedirects(respuesta, url)
+        self.assertTrue(
+            Coleccion.objects.filter(nombre='Herramientas para casa').exists()
+        )
+
+        respuesta = self.client.post(
+            reverse('eliminar_coleccion', args=[coleccion.pk]),
+        )
+        self.assertRedirects(respuesta, url)
+        self.assertFalse(Coleccion.objects.exists())
+
+    def test_formulario_contacto_persiste_mensaje(self):
+        respuesta = self.client.post(
+            reverse('contacto'),
+            {
+                'nombre': 'Ana Pérez',
+                'email': 'ana@example.com',
+                'telefono': '123456789',
+                'asunto': 'Consulta de stock',
+                'mensaje': '¿Tienen unidades disponibles?',
+            },
+        )
+
+        self.assertRedirects(respuesta, reverse('contacto'))
+        contacto = Contacto.objects.get()
+        self.assertEqual(contacto.nombre, 'Ana Pérez')
+        self.assertEqual(contacto.mensaje, '¿Tienen unidades disponibles?')
+
+    def test_reportes_agregan_inventario_y_ventas_con_orm(self):
+        Compra.objects.create(
+            consumidor=self.consumidor,
+            producto=self.producto,
+            nombre_producto=self.producto.nombre,
+            precio_unitario=self.producto.precio,
+            cantidad=2,
+        )
+        self.client.force_login(self.administrador)
+
+        respuesta = self.client.get(reverse('reportes'))
+
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, 'Inventario por categoría')
+        self.assertContains(respuesta, 'Productos más vendidos')
+        self.assertContains(respuesta, 'Martillo')
+        self.assertContains(respuesta, '$24000')

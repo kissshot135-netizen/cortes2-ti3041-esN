@@ -4,12 +4,19 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.db import transaction
+from django.db.models import Count, F, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from .forms import CompraForm, ProductoForm, RegistroConsumidorForm
-from .models import Compra, Producto
+from .forms import (
+    ColeccionForm,
+    CompraForm,
+    ContactoForm,
+    ProductoForm,
+    RegistroConsumidorForm,
+)
+from .models import Coleccion, Compra, Producto
 
 
 def inicio(request):
@@ -103,6 +110,23 @@ def gestionar_productos(request):
 
 @login_required
 @user_passes_test(es_administrador)
+def editar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+    form = ProductoForm(request.POST or None, instance=producto)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Se actualizó {producto.nombre}.')
+        return redirect('gestionar_productos')
+
+    return render(
+        request,
+        'catalogo/editar_producto.html',
+        {'form': form, 'producto': producto},
+    )
+
+
+@login_required
+@user_passes_test(es_administrador)
 @require_POST
 def eliminar_producto(request, producto_id):
     producto = get_object_or_404(Producto, pk=producto_id)
@@ -110,3 +134,99 @@ def eliminar_producto(request, producto_id):
     producto.delete()
     messages.success(request, f'Se eliminó {nombre} del catálogo.')
     return redirect('gestionar_productos')
+
+
+def lista_colecciones(request):
+    colecciones = Coleccion.objects.prefetch_related('productos').order_by('nombre')
+    return render(
+        request,
+        'catalogo/colecciones.html',
+        {'colecciones': colecciones},
+    )
+
+
+@login_required
+@user_passes_test(es_administrador)
+def gestionar_colecciones(request):
+    form = ColeccionForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        coleccion = form.save()
+        messages.success(request, f'Se creó la colección {coleccion.nombre}.')
+        return redirect('gestionar_colecciones')
+
+    colecciones = Coleccion.objects.prefetch_related('productos').order_by('nombre')
+    return render(
+        request,
+        'catalogo/gestionar_colecciones.html',
+        {'form': form, 'colecciones': colecciones},
+    )
+
+
+@login_required
+@user_passes_test(es_administrador)
+def editar_coleccion(request, coleccion_id):
+    coleccion = get_object_or_404(Coleccion, pk=coleccion_id)
+    form = ColeccionForm(request.POST or None, instance=coleccion)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Se actualizó la colección {coleccion.nombre}.')
+        return redirect('gestionar_colecciones')
+
+    return render(
+        request,
+        'catalogo/editar_coleccion.html',
+        {'form': form, 'coleccion': coleccion},
+    )
+
+
+@login_required
+@user_passes_test(es_administrador)
+@require_POST
+def eliminar_coleccion(request, coleccion_id):
+    coleccion = get_object_or_404(Coleccion, pk=coleccion_id)
+    nombre = coleccion.nombre
+    coleccion.delete()
+    messages.success(request, f'Se eliminó la colección {nombre}.')
+    return redirect('gestionar_colecciones')
+
+
+@login_required
+@user_passes_test(es_administrador)
+def reportes(request):
+    productos_por_categoria = (
+        Producto.objects.values('categoria')
+        .annotate(
+            cantidad_productos=Count('id'),
+            stock_total=Sum('stock'),
+            valor_inventario=Sum(F('precio') * F('stock')),
+        )
+        .order_by('categoria')
+    )
+    ventas_por_producto = (
+        Compra.objects.values('nombre_producto')
+        .annotate(
+            unidades_vendidas=Sum('cantidad'),
+            ingresos=Sum(F('precio_unitario') * F('cantidad')),
+        )
+        .order_by('-ingresos', 'nombre_producto')[:10]
+    )
+    return render(
+        request,
+        'catalogo/reportes.html',
+        {
+            'productos_por_categoria': productos_por_categoria,
+            'ventas_por_producto': ventas_por_producto,
+        },
+    )
+
+
+def formulario_contacto(request):
+    form = ContactoForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        contacto = form.save()
+        messages.success(
+            request,
+            f'Gracias, {contacto.nombre}. Recibimos tu mensaje.',
+        )
+        return redirect('contacto')
+    return render(request, 'catalogo/contacto.html', {'form': form})
