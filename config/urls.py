@@ -18,10 +18,24 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from catalogo import views
+from catalogo import api, views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', api.api_root, name='api_root'),
+    path('api/v1/productos/', api.api_productos, name='api_productos'),
+    path(
+        'api/v1/productos/<int:producto_id>/',
+        api.api_producto_detalle,
+        name='api_producto_detalle',
+    ),
+    path('api/v1/colecciones/', api.api_colecciones, name='api_colecciones'),
+    path(
+        'api/v1/colecciones/<int:coleccion_id>/',
+        api.api_coleccion_detalle,
+        name='api_coleccion_detalle',
+    ),
+    path('api/v1/contactos/', api.api_contactos, name='api_contactos'),
     path('', views.inicio, name='inicio'),
     path('catalogo/', views.lista_productos, name='lista_productos'),
     path('colecciones/', views.lista_colecciones, name='lista_colecciones'),

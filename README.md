@@ -1,15 +1,16 @@
-# Catálogo de ferretería (TI3041-ES2)
+# Catálogo Online (TI3041 ES3 + API ES4)
 
-Aplicación Django para consultar productos de una ferretería, comprar como
-consumidor y gestionar productos como administrador.
+Aplicación Django para que una ferretería administre productos y colecciones,
+consulte reportes del negocio, reciba mensajes de clientes y publique una API
+JSON para integraciones. Incluye carrito de compras persistido en la sesión.
 
 ## Requisitos y ejecución local
 
-Se utiliza SQLite, incluida con Python, por lo que no se necesita instalar
-`mysqlclient`. Desde la raíz del proyecto, en Windows:
+Se utiliza SQLite, incluida con Python. Desde PowerShell en la raíz:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 python manage.py migrate
 python catalogo\poblar.py
@@ -17,48 +18,71 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Abre `http://127.0.0.1:8000/` para la portada, `/catalogo/` para el listado y
-`/admin/` para la administración de Django. En `/cuenta/registro/` se crean
-cuentas de consumidor. El usuario creado con `createsuperuser` puede ingresar
-al panel de gestión de la tienda en `/gestionar/`.
+La clave Django se genera al iniciar si no existe `DJANGO_SECRET_KEY` en el
+entorno. Para un entorno desplegado define una clave persistente, configura
+`DJANGO_ALLOWED_HOSTS` y deja `DJANGO_DEBUG=false`.
 
-El script de poblamiento incorpora 40 productos de ferretería con nombres,
-categorías, precios en pesos chilenos y stock inicial. Es repetible: agrega los
-productos faltantes, completa las imágenes que estén vacías y no elimina ni
-restablece los existentes. Para aplicar esta corrección a una base existente,
-ejecuta nuevamente `python catalogo\poblar.py`.
+El poblamiento agrega los 40 productos de demostración y completa las imágenes
+vacías de productos existentes sin reemplazar valores personalizados.
 
-## Base de datos y migraciones
+## Funcionalidades web
 
-La configuración de desarrollo está en `config/settings.py` y utiliza la base
-SQLite local `db.sqlite3`, excluida de Git. Las migraciones que definen los
-modelos se encuentran en `catalogo/migrations/`. Para revisar y aplicar
-cambios:
+- Catálogo público y CRUD de productos para administradores en `/gestionar/`.
+- Colecciones de productos en `/colecciones/`; su CRUD está en
+  `/gestionar/colecciones/`.
+- Dos reportes privados para administradores en `/gestionar/reportes/`:
+  inventario agrupado por categoría y productos más vendidos/ingresos. Ambos
+  cálculos usan agregaciones del ORM.
+- Formulario público de contacto en `/contacto/`; los mensajes quedan guardados
+  y se revisan desde el panel de administración de Django.
+- Carrito de sesión accesible en `/carrito/`. Se puede armar sin iniciar sesión;
+  para confirmar la compra se requiere una cuenta de consumidor.
+- Registro de consumidores en `/cuenta/registro/`. Las cuentas administrativas
+  se crean con `createsuperuser`; el registro público no concede esos permisos.
+
+## API JSON
+
+Base: `/api/v1/`. Las lecturas de productos y colecciones son públicas. Para
+crear, editar o eliminar esos recursos se requiere una sesión autenticada de
+administrador y protección CSRF. El envío de contactos es público; su listado
+es administrativo.
+
+| Ruta | Métodos | Uso |
+|---|---|---|
+| `/api/v1/` | GET | Índice de recursos |
+| `/api/v1/productos/` | GET, POST | Listar y crear productos |
+| `/api/v1/productos/{id}/` | GET, PUT, PATCH, DELETE | Consultar y administrar un producto |
+| `/api/v1/colecciones/` | GET, POST | Listar y crear colecciones |
+| `/api/v1/colecciones/{id}/` | GET, PUT, PATCH, DELETE | Consultar y administrar una colección |
+| `/api/v1/contactos/` | POST, GET | Crear un mensaje; listado solo para administradores |
+
+Las respuestas y errores usan JSON. Por ejemplo:
+
+```powershell
+curl.exe http://127.0.0.1:8000/api/v1/productos/
+```
+
+Las solicitudes de escritura usan JSON y respetan permisos y CSRF de Django.
+
+## Base de datos y pruebas
+
+La base local `db.sqlite3` está excluida de Git. Para aplicar cambios de
+modelos:
 
 ```powershell
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-Si `/catalogo/` muestra `no such table: catalogo_producto`, ejecuta
-`python manage.py migrate` desde la raíz del proyecto y reinicia el servidor.
-
-Si el curso exige una instancia MySQL específica, hay que reemplazar la
-configuración SQLite por los datos de conexión entregados por el docente e
-instalar el controlador indicado por él. No se incluyen credenciales de base
-de datos en este repositorio.
-
-## Pruebas
+Ejecuta los controles y pruebas:
 
 ```powershell
 python manage.py check
 python manage.py test catalogo
 ```
 
-## Etapas registradas en Git
+## Trazabilidad de etapas y uso de IA
 
-El historial contiene los commits `etapa-0-entorno`, `etapa-1-modelo`,
-`etapa-2-admin` y `etapa-3-bd`. La entrega de documentación y verificación se
-registra en el commit `entrega-final`.
-
-El registro de consultas y asistencia de IA está en [USO_IA.md](USO_IA.md).
+El trabajo se organiza en cuatro commits: modelos y formularios, funcionalidades
+web, carrito de sesión y API/documentación. El registro de consultas y revisión
+está en [uso_ia.md](uso_ia.md).

@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
@@ -340,3 +342,161 @@ class CatalogoTests(TestCase):
         self.producto.refresh_from_db()
         self.assertEqual(self.producto.stock, 5)
         self.assertFalse(Compra.objects.exists())
+
+    def test_api_productos_permite_lectura_publica_y_crud_de_administrador(self):
+        url = reverse('api_productos')
+        respuesta = self.client.get(url)
+        self.assertEqual(respuesta.status_code, 200)
+        productos = json.loads(respuesta.content)['results']
+        self.assertTrue(any('Martillo' in item['nombre'] for item in productos))
+
+        respuesta = self.client.post(
+            url,
+            data=json.dumps(
+                {
+                    'nombre': 'Taladro API',
+                    'categoria': 'Herramientas',
+                    'precio': 50000,
+                    'stock': 3,
+                    'imagen': '',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 401)
+
+        self.client.force_login(self.consumidor)
+        respuesta = self.client.post(
+            url,
+            data=json.dumps(
+                {
+                    'nombre': 'Taladro API',
+                    'categoria': 'Herramientas',
+                    'precio': 50000,
+                    'stock': 3,
+                    'imagen': '',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 403)
+
+        self.client.force_login(self.administrador)
+        respuesta = self.client.post(
+            url,
+            data=json.dumps(
+                {
+                    'nombre': 'Taladro API',
+                    'categoria': 'Herramientas',
+                    'precio': 50000,
+                    'stock': 3,
+                    'imagen': '',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 201)
+        producto_id = json.loads(respuesta.content)['id']
+
+        respuesta = self.client.patch(
+            reverse('api_producto_detalle', args=[producto_id]),
+            data=json.dumps({'stock': 4}),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(json.loads(respuesta.content)['stock'], 4)
+
+        respuesta = self.client.put(
+            reverse('api_producto_detalle', args=[producto_id]),
+            data=json.dumps(
+                {
+                    'nombre': 'Taladro API actualizado',
+                    'categoria': 'Herramientas eléctricas',
+                    'precio': 52000,
+                    'stock': 5,
+                    'imagen': '',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(
+            json.loads(respuesta.content)['nombre'],
+            'Taladro API actualizado',
+        )
+
+        respuesta = self.client.delete(
+            reverse('api_producto_detalle', args=[producto_id]),
+        )
+        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(respuesta.content, b'')
+        self.assertFalse(Producto.objects.filter(pk=producto_id).exists())
+
+    def test_api_colecciones_y_contactos_validan_y_persisten_json(self):
+        self.client.force_login(self.administrador)
+        respuesta = self.client.post(
+            reverse('api_colecciones'),
+            data=json.dumps(
+                {
+                    'nombre': 'Colección API',
+                    'descripcion': 'Productos destacados',
+                    'productos': [self.producto.pk],
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 201)
+        coleccion_id = json.loads(respuesta.content)['id']
+
+        respuesta = self.client.patch(
+            reverse('api_coleccion_detalle', args=[coleccion_id]),
+            data=json.dumps({'nombre': 'Colección actualizada'}),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(
+            json.loads(respuesta.content)['nombre'],
+            'Colección actualizada',
+        )
+
+        respuesta = self.client.delete(
+            reverse('api_coleccion_detalle', args=[coleccion_id]),
+        )
+        self.assertEqual(respuesta.status_code, 204)
+
+        self.client.logout()
+        respuesta = self.client.post(
+            reverse('api_contactos'),
+            data=json.dumps(
+                {
+                    'nombre': 'API Cliente',
+                    'email': 'api@example.com',
+                    'telefono': '',
+                    'asunto': 'Consulta API',
+                    'mensaje': 'Necesito más información.',
+                }
+            ),
+            content_type='application/json',
+        )
+        self.assertEqual(respuesta.status_code, 201)
+        self.assertEqual(Contacto.objects.get().email, 'api@example.com')
+
+        respuesta = self.client.get(reverse('api_contactos'))
+        self.assertEqual(respuesta.status_code, 401)
+        self.client.force_login(self.administrador)
+        respuesta = self.client.get(reverse('api_contactos'))
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(
+            json.loads(respuesta.content)['results'][0]['email'],
+            'api@example.com',
+        )
+
+    def test_api_rechaza_json_invalido(self):
+        respuesta = self.client.post(
+            reverse('api_contactos'),
+            data='{invalido',
+            content_type='application/json',
+        )
+
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertIn('JSON válido', json.loads(respuesta.content)['detail'])
