@@ -47,17 +47,15 @@
                         {% endif %}
                         <div class="mt-auto">
                             {% if producto.stock > 0 %}
-                                {% if user.is_authenticated and not user.is_staff %}
-                                    <form method="post" action="{% url 'comprar_producto' producto.id %}">
+                                {% if not user.is_staff %}
+                                    <form method="post" action="{% url 'agregar_al_carrito' producto.id %}">
                                         {% csrf_token %}
                                         <label class="form-label small fw-semibold" for="cantidad-{{ producto.id }}">Cantidad</label>
                                         <div class="input-group">
                                             <input class="form-control" id="cantidad-{{ producto.id }}" type="number" name="cantidad" min="1" max="{{ producto.stock }}" value="1" required>
-                                            <button class="btn btn-primary" type="submit">Comprar</button>
+                                            <button class="btn btn-primary" type="submit">Agregar al carrito</button>
                                         </div>
                                     </form>
-                                {% elif not user.is_authenticated %}
-                                    <a class="btn btn-outline-primary w-100" href="{% url 'ingreso' %}?next={% url 'lista_productos' %}">Ingresa para comprar</a>
                                 {% endif %}
                             {% endif %}
                         </div>

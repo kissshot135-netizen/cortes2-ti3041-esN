@@ -230,3 +230,108 @@ def formulario_contacto(request):
         )
         return redirect('contacto')
     return render(request, 'catalogo/contacto.html', {'form': form})
+
+
+@require_POST
+def agregar_al_carrito(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+    form = CompraForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, 'Indica una cantidad válida para agregar.')
+        return redirect('lista_productos')
+
+    carrito = request.session.get('carrito', {})
+    clave_producto = str(producto.pk)
+    cantidad = carrito.get(clave_producto, 0) + form.cleaned_data['cantidad']
+    if cantidad > producto.stock:
+        messages.error(
+            request,
+            f'Solo hay {producto.stock} unidades disponibles de {producto.nombre}.',
+        )
+        return redirect('lista_productos')
+
+    carrito[clave_producto] = cantidad
+    request.session['carrito'] = carrito
+    messages.success(request, f'{producto.nombre} se agregó al carrito.')
+    return redirect('lista_productos')
+
+
+def ver_carrito(request):
+    carrito = request.session.get('carrito', {})
+    productos = Producto.objects.filter(pk__in=carrito.keys()).order_by('nombre')
+    items = []
+    carrito_valido = {}
+    for producto in productos:
+        cantidad = carrito.get(str(producto.pk))
+        if not isinstance(cantidad, int) or cantidad < 1:
+            continue
+        carrito_valido[str(producto.pk)] = cantidad
+        items.append(
+            {
+                'producto': producto,
+                'cantidad': cantidad,
+                'subtotal': producto.precio * cantidad,
+            }
+        )
+
+    request.session['carrito'] = carrito_valido
+    return render(
+        request,
+        'catalogo/carrito.html',
+        {'items': items, 'total': sum(item['subtotal'] for item in items)},
+    )
+
+
+@require_POST
+def quitar_del_carrito(request, producto_id):
+    carrito = request.session.get('carrito', {})
+    carrito.pop(str(producto_id), None)
+    request.session['carrito'] = carrito
+    messages.success(request, 'Se quitó el producto del carrito.')
+    return redirect('ver_carrito')
+
+
+@login_required
+@require_POST
+def finalizar_compra(request):
+    carrito = request.session.get('carrito', {})
+    if not carrito:
+        messages.error(request, 'El carrito está vacío.')
+        return redirect('ver_carrito')
+
+    with transaction.atomic():
+        productos = list(
+            Producto.objects.select_for_update().filter(pk__in=carrito.keys())
+        )
+        if len(productos) != len(carrito):
+            messages.error(
+                request,
+                'El carrito contiene productos que ya no están disponibles.',
+            )
+            return redirect('ver_carrito')
+
+        pedidos = []
+        for producto in productos:
+            cantidad = carrito.get(str(producto.pk))
+            if not isinstance(cantidad, int) or cantidad < 1:
+                messages.error(request, 'El carrito contiene una cantidad inválida.')
+                return redirect('ver_carrito')
+            if producto.stock < cantidad:
+                messages.error(request, f'Stock insuficiente para {producto.nombre}.')
+                return redirect('ver_carrito')
+            pedidos.append((producto, cantidad))
+
+        for producto, cantidad in pedidos:
+            Compra.objects.create(
+                consumidor=request.user,
+                producto=producto,
+                nombre_producto=producto.nombre,
+                precio_unitario=producto.precio,
+                cantidad=cantidad,
+            )
+            producto.stock -= cantidad
+            producto.save(update_fields=['stock'])
+
+    request.session['carrito'] = {}
+    messages.success(request, 'Compra realizada. Gracias por tu pedido.')
+    return redirect('lista_productos')

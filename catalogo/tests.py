@@ -282,3 +282,61 @@ class CatalogoTests(TestCase):
         self.assertContains(respuesta, 'Productos más vendidos')
         self.assertContains(respuesta, 'Martillo')
         self.assertContains(respuesta, '$24000')
+
+    def test_carrito_guarda_cantidades_en_la_sesion_y_permite_quitar(self):
+        respuesta = self.client.post(
+            reverse('agregar_al_carrito', args=[self.producto.pk]),
+            {'cantidad': 2},
+        )
+
+        self.assertRedirects(respuesta, reverse('lista_productos'))
+        self.assertEqual(
+            self.client.session['carrito'],
+            {str(self.producto.pk): 2},
+        )
+        respuesta = self.client.get(reverse('ver_carrito'))
+        self.assertContains(respuesta, 'Martillo')
+        self.assertContains(respuesta, '$24000')
+        self.assertContains(respuesta, 'Carrito (2)')
+
+        respuesta = self.client.post(
+            reverse('quitar_del_carrito', args=[self.producto.pk]),
+        )
+        self.assertRedirects(respuesta, reverse('ver_carrito'))
+        self.assertEqual(self.client.session['carrito'], {})
+
+    def test_carrito_rechaza_cantidad_superior_al_stock(self):
+        respuesta = self.client.post(
+            reverse('agregar_al_carrito', args=[self.producto.pk]),
+            {'cantidad': 6},
+        )
+
+        self.assertRedirects(respuesta, reverse('lista_productos'))
+        self.assertEqual(self.client.session.get('carrito', {}), {})
+
+    def test_checkout_del_carrito_crea_compras_y_descuenta_stock(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.pk): 2}
+        session.save()
+        self.client.force_login(self.consumidor)
+
+        respuesta = self.client.post(reverse('finalizar_compra'))
+
+        self.assertRedirects(respuesta, reverse('lista_productos'))
+        self.producto.refresh_from_db()
+        self.assertEqual(self.producto.stock, 3)
+        self.assertEqual(Compra.objects.get().cantidad, 2)
+        self.assertEqual(self.client.session['carrito'], {})
+
+    def test_checkout_no_modifica_stock_si_el_carrito_supera_disponibilidad(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.pk): 6}
+        session.save()
+        self.client.force_login(self.consumidor)
+
+        respuesta = self.client.post(reverse('finalizar_compra'))
+
+        self.assertRedirects(respuesta, reverse('ver_carrito'))
+        self.producto.refresh_from_db()
+        self.assertEqual(self.producto.stock, 5)
+        self.assertFalse(Compra.objects.exists())

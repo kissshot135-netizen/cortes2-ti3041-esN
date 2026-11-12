@@ -33,6 +33,7 @@
                     <a class="nav-link" href="{% url 'lista_productos' %}">Catálogo</a>
                     <a class="nav-link" href="{% url 'lista_colecciones' %}">Colecciones</a>
                     <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
+                    <a class="nav-link" href="{% url 'ver_carrito' %}">Carrito ({{ carrito_total }})</a>
                     {% if user.is_authenticated and user.is_staff %}
                         <a class="nav-link" href="{% url 'gestionar_productos' %}">Administración</a>
                         <a class="nav-link" href="{% url 'reportes' %}">Reportes</a>
